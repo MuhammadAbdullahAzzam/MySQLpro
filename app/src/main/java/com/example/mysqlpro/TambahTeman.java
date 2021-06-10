@@ -1,5 +1,6 @@
 package com.example.mysqlpro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,8 +44,13 @@ public class TambahTeman extends AppCompatActivity {
 
         simpanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 SimpanData();
+                Intent inten = new Intent(
+                        getApplicationContext(), MainActivity.class);
+                startActivity(inten);
+                finish();
             }
         });
     }
@@ -64,27 +70,27 @@ public class TambahTeman extends AppCompatActivity {
             StringRequest strReq = new StringRequest(Request.Method.POST, url_insert, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d(TAG, "Response : " + response.toString());
-                    try {
+                    Log.d(TAG, "Response : "+ response.toString());
+
+                    try{
                         JSONObject jObj = new JSONObject(response);
                         success = jObj.getInt(TAG_SUCCES);
-                        if (success == 1) {
+                        if (success == 1){
                             Toast.makeText(TambahTeman.this, "Sukses simpan data", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }else{
                             Toast.makeText(TambahTeman.this, "gagal", Toast.LENGTH_SHORT).show();
                         }
-                    } catch (JSONException e) {
+                    }catch (JSONException e){
                         e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
+                }}
+            },new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e(TAG,"Error : "+error.getMessage());
                     Toast.makeText(TambahTeman.this,"Gagal simpan data",Toast.LENGTH_SHORT).show();
                 }
 
-            }) {
+            }){
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
