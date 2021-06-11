@@ -1,7 +1,6 @@
 package com.example.mysqlpro.adapter;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,7 +14,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.mysqlpro.MainActivity;
 import com.example.mysqlpro.R;
 import com.example.mysqlpro.app.AppController;
-import com.example.mysqlpro.database.EditTeman;
+import com.example.mysqlpro.EditTeman;
 import com.example.mysqlpro.database.Teman;
 
 import org.json.JSONException;
@@ -39,19 +37,20 @@ import java.util.Map;
 public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHolder> {
     private ArrayList<Teman> listData;
 
-    public TemanAdapter(ArrayList<Teman> listData){
+    public TemanAdapter(ArrayList<Teman> listData) {
+
         this.listData = listData;
     }
 
     @Override
     public TemanViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater layoutinf = LayoutInflater.from(parent.getContext());
-        View view = layoutinf.inflate(R.layout.row_data_teman,parent,false);
+        LayoutInflater layoutInf = LayoutInflater.from(parent.getContext());
+        View view = layoutInf.inflate(R.layout.row_data_teman,parent,false);
         return new TemanViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(TemanViewHolder holder, int position){
+    public void onBindViewHolder(TemanViewHolder holder, int position) {
         String nm, tlp,id;
         id = listData.get(position).getId();
         nm = listData.get(position).getNama();
@@ -63,7 +62,7 @@ public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHol
         holder.telponTxt.setText(tlp);
         holder.cardku.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
-            public boolean onLongClick(View v){
+            public boolean onLongClick(View v) {
                 PopupMenu pm = new PopupMenu(v.getContext(),v);
                 pm.inflate(R.menu.popup1);
                 pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -89,7 +88,7 @@ public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHol
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         HapusData(id);
-                                        Toast.makeText(v.getContext(),"Data "+id+"Telah dihapus",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(v.getContext(),"Data "+id+"Telah dihapus", Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(v.getContext(), MainActivity.class);
                                         v.getContext().startActivity(intent);
                                     }
@@ -113,10 +112,11 @@ public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHol
         });
     }
     private void HapusData(final String idx){
-        String url_update = "http://10.0.2.2/umyTI/deletetm.php";
+        String url_update = "http://10.0.2.2:8081/umyTI/deletetm.php";
         final String TAG = MainActivity.class.getSimpleName();
         final String TAG_SUCCESS = "success";
         final int[] sukses = new int[1];
+
         StringRequest stringReq = new StringRequest(Request.Method.POST, url_update, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -136,7 +136,7 @@ public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHol
         })
         {
             @Override
-            protected Map<String, String> getParams(){
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("id", idx);
                 return params;}
@@ -145,13 +145,14 @@ public class TemanAdapter extends RecyclerView.Adapter<TemanAdapter.TemanViewHol
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return (listData != null)?listData.size() : 0;
     }
+
     public class TemanViewHolder extends RecyclerView.ViewHolder {
         private CardView cardku;
-        private TextView namaTxt, telponTxt;
-        public TemanViewHolder(View view){
+        private TextView namaTxt,telponTxt;
+        public TemanViewHolder(View view) {
             super(view);
             cardku = (CardView) view.findViewById(R.id.cardku);
             namaTxt = (TextView) view.findViewById(R.id.txtNama);

@@ -34,10 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Teman> temanArrayList = new ArrayList<>();
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static String url_select = "http://10.0.2.2/umyTI/bacateman.php";
+    private static  String url_select = "http://10.0.2.2:8081/umyTI/bacateman.php";
     public static final String TAG_ID = "id";
     public static final String TAG_NAMA = "nama";
     public static final String TAG_TELPON = "telpon";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.floatingBtn);
         BacaData();
         adapter = new TemanAdapter(temanArrayList);
-        RecyclerView.LayoutManager lm = new LinearLayoutManager(MainActivity.this);
-        recyclerView.setLayoutManager(lm);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, response.toString());
-
-                //Parsing json
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject obj = response.getJSONObject(i);
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         item.setNama(obj.getString(TAG_NAMA));
                         item.setTelpon(obj.getString(TAG_TELPON));
 
-                        //menambah item ke array
+                        // menambah item ke array
                         temanArrayList.add(item);
                     } catch (JSONException e) {
                         e.printStackTrace();

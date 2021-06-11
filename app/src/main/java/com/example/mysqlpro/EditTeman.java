@@ -1,4 +1,4 @@
-package com.example.mysqlpro.database;
+package com.example.mysqlpro;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.mysqlpro.MainActivity;
-import com.example.mysqlpro.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,10 +30,9 @@ public class EditTeman extends AppCompatActivity {
     Button editBtn;
     String id, nm, tlp, namaEd, telponEd;
     int sukses;
-
-    private static String url_update = "http://10.0.2.2/umyTI/updatetm.php";
-    private static final String TAG = EditTeman.class.getSimpleName();
-    private static final String TAG_SUCCES = "success";
+    private static String url_update = "http://10.0.2.2:8081/umyTI/updatetm.php";
+    public static final String TAG = EditTeman.class.getSimpleName();
+    public static final String TAG_SUCCES = "success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +43,14 @@ public class EditTeman extends AppCompatActivity {
         edNama = findViewById(R.id.editNm);
         edTelpon = findViewById(R.id.editTlp);
         editBtn = findViewById(R.id.buttonEdit);
-
-
         Bundle bundle = getIntent().getExtras();
-        id = bundle.getString("kunci1");
-        nm = bundle.getString("kunci2");
-        tlp = bundle.getString("kunci3");
+        id =bundle.getString("kunci1");
+        nm =bundle.getString("kunci2");
+        tlp =bundle.getString("kunci3");
 
         idText.setText("Id: "+ id);
         edNama.setText(nm);
         edTelpon.setText(tlp);
-
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,11 +59,9 @@ public class EditTeman extends AppCompatActivity {
         });
     }
 
-    public void EditData()
-    {
+    public void EditData() {
         namaEd = edNama.getText().toString();
         telponEd = edTelpon.getText().toString();
-
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringReq = new StringRequest(Request.Method.POST, url_update, new Response.Listener<String>() {
             @Override
@@ -78,20 +70,19 @@ public class EditTeman extends AppCompatActivity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     sukses = jObj.getInt(TAG_SUCCES);
-                    if (sukses == 1){
-                        Toast.makeText(EditTeman.this,"Sukses mengedit data",Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(EditTeman.this, "gagal", Toast.LENGTH_SHORT).show();
+                    if (sukses == 1) {
+                        Toast.makeText(EditTeman.this, "Sukses Mengedit data", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(EditTeman.this, "Gagal Mengedit data", Toast.LENGTH_SHORT).show();
                     }
-                    }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
-                }}
-            },new Response.ErrorListener(){
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error){
-                Log.e(TAG,"Error : "+error.getMessage());
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error : " + error.getMessage());
                 Toast.makeText(EditTeman.this, "Gagal Edit DATA", Toast.LENGTH_SHORT).show();
             }
         }) {
